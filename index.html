@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Transações Financeiras</title>
+  </head>
+  <body>
+  <h1>Estatísticas de Transações</h1>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-label">Total de Transações</div>
+      <div class="card-value" id="total-transacoes"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Valor Total</div>
+      <div class="card-value" id="valor-total"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Pagamento Mais Usado</div>
+      <div class="card-value" id="pagamento-mais-usado"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Dia com Mais Vendas</div>
+      <div class="card-value" id="dia-mais-vendas"></div>
+    </div>
+  </div>
+
+  <div class="secao">
+    <h2>Formas de Pagamento</h2>
+    <ul class="lista-itens" id="contagem-pagamentos"></ul>
+  </div>
+
+  <div class="secao">
+    <h2>Status das Transações</h2>
+    <ul class="lista-itens" id="contagem-status"></ul>
+  </div>
+
+  <div class="secao">
+    <h2>Dados das Transações</h2>
+    <div id="tabela-transacoes"></div>
+  </div>
+
+  <script type="module" src="./dist/main.js"></script>
+</body>
+</html>
