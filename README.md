@@ -45,4 +45,3 @@ transacoes-ts/
 ├── tsconfig.json      # Configurações do compilador TypeScript
 ├── package.json       # Metadados do projeto
 └── .gitignore         # Arquivos ignorados pelo Git
-
