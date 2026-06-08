@@ -1,6 +1,5 @@
 # Dashboard de Transações Financeiras
 Projeto desenvolvido como entregável da Trilha de TypeScript
-Sobre o Projeto
 
 ## O que o dashboard exibe:
 
@@ -34,14 +33,11 @@ Este projeto foi desenvolvido com apoio dos seguintes recursos:
 - TypeScript Cheat Sheets
 - Claude (Anthropic) 
 
-# Estrutura do Projeto
-transacoes-ts/
-├── src/
-│   └── main.ts        # Código TypeScript principal
-├── dist/
-│   └── main.js        # Código compilado
-├── index.html         # Estrutura da página
-├── style.css          # Estilização do dashboard
-├── tsconfig.json      # Configurações do compilador TypeScript
-├── package.json       # Metadados do projeto
-└── .gitignore         # Arquivos ignorados pelo Git
+### Estrutura do Projeto
+- main.ts: Código TypeScript principal
+- main.js: Código compilado
+- index.html: Estrutura da página
+- style.css: Estilização do dashboard
+- tsconfig.json: Configurações do compilador TypeScript
+- package.json: Metadados do projeto
+- .gitignore: Arquivos ignorados pelo Git
