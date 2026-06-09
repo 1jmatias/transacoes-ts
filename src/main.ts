@@ -1,19 +1,34 @@
 interface Transacao {
-    status: string;
-    id: number;
-    data: string;
-    nome: string;
+    Status: string;
+    ID: number;
+    Data: string;
+    Nome: string;
     "Forma de Pagamento": string;
-    email: string;
+    Email: string;
     "Valor (R$)": string;
     "Cliente Novo": number;
     [key: string]: string | number;
 }
 
-function pegarElemento(id: string): HTMLElement {
-  const elemento = document.getElementById(id);
+function isTransacao(obj: unknown): obj is Transacao { //typeguard -> verificação de transação válida
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "Status" in obj &&
+    "ID" in obj &&
+    "Data" in obj &&
+    "Nome" in obj &&
+    "Forma de Pagamento" in obj &&
+    "Email" in obj &&
+    "Valor (R$)" in obj &&
+    "Cliente Novo" in obj
+  );
+}
+
+function pegarElemento(ID: string): HTMLElement {
+  const elemento = document.getElementById(ID);
   if (!(elemento instanceof HTMLElement)) { // typeguard para verificar se é do tipo HTML
-    throw new Error(`Elemento com id "${id}" não encontrado no HTML.`);
+    throw new Error(`Elemento com ID "${ID}" não encontrado no HTML.`);
   }
   return elemento;
 }
@@ -35,7 +50,7 @@ function pagamentoMaisUsado(transacoes: Transacao[]): string {
 
   transacoes.forEach((transacao: Transacao) => {
     const pagamento = transacao["Forma de Pagamento"];
-    if (typeof pagamento !== "string") { //typeguard para verificar se é do tipo string
+    if (typeof pagamento !== "string") {
       throw new Error("Forma de Pagamento deveria ser string");
     }
     if (contagem[pagamento] === undefined) {
@@ -62,7 +77,7 @@ function contarOcorrencias(transacoes: Transacao[], campo: string): { [key: stri
 
   transacoes.forEach((transacao: Transacao) => {
     const valor = transacao[campo];
-    if (typeof valor !== "string") { //typeguard para verificar se é do tipo string
+    if (typeof valor !== "string") {
       throw new Error(`Campo "${campo}" deveria ser string`);
     }
     if (contagem[valor] === undefined) {
@@ -79,7 +94,7 @@ function diaMaisVendas(transacoes: Transacao[]): string {
 
   transacoes.forEach((transacao: Transacao) => {
     const data = transacao["Data"];
-    if (typeof data !== "string") { //typeguard para verificar se é do tipo string
+    if (typeof data !== "string") {
       throw new Error(`Campo "Data" deveria ser string`);
     }
     const partes = data.split(" ")[0].split("/");
@@ -122,13 +137,10 @@ function criarTabela(transacoes: Transacao[]): void {
 
   transacoes.forEach((transacao: Transacao) => {
     const linha = document.createElement("tr");
-
     colunas.forEach((coluna: string) => {
       const td = document.createElement("td");
       const valor = transacao[coluna];
-      if (typeof valor !== "string" && typeof valor !== "number") { //typeguard para verificar se é do tipo string ou number
-        throw new Error(`Campo "${coluna}" tem tipo inválido`);
-      }
+
       td.innerText = String(valor);
       if (coluna === "Status") {
         if (valor === "Paga") td.className = "status-paga";
@@ -147,8 +159,19 @@ function criarTabela(transacoes: Transacao[]): void {
 
 async function buscarTransacoes(): Promise<Transacao[]> {
   const resposta = await fetch("https://api.origamid.dev/json/transacoes.json");
-  const dados: Transacao[] = await resposta.json();
-  return dados;
+  const dados: unknown = await resposta.json();
+
+  if (!Array.isArray(dados)) { //type guard para verificar se os dados são um array
+    throw new Error("A API não retornou um array.");
+  }
+
+  const transacoes = dados.filter(isTransacao);
+
+  if (transacoes.length === 0) {
+    throw new Error("Nenhuma transação válida encontrada.");
+  }
+
+  return transacoes;
 }
 
 async function iniciar(): Promise<void> {
@@ -161,7 +184,7 @@ async function iniciar(): Promise<void> {
     elTotalTransacoes.innerText = `Total de transações: ${totalTransacoes}`;
   const valorTotal: number = transacoes.reduce((acumulador: number, transacao: Transacao) => {
     const valor = transacao["Valor (R$)"];
-    if (typeof valor !== "string") { //typeguard para verificar se é do tipo string
+    if (typeof valor !== "string") {
       throw new Error(`"Valor (R$)" deveria ser string, mas é ${typeof valor}`);
     }
     return acumulador + converterParaNumero(valor);
@@ -181,9 +204,9 @@ async function iniciar(): Promise<void> {
 
   const contagemStatus = contarOcorrencias(transacoes, "Status");
   const elContagemStatus = pegarElemento("contagem-status");
-    for (const status in contagemStatus) {
+    for (const Status in contagemStatus) {
       const li = document.createElement("li");
-      li.innerText = `${status}: ${contagemStatus[status]}`;
+      li.innerText = `${Status}: ${contagemStatus[Status]}`;
       elContagemStatus.appendChild(li);
     }
 
